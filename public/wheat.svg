@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Wheat illustration">
+  <defs>
+    <linearGradient id="stem" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#5f8f2f" />
+      <stop offset="100%" stop-color="#3d6e20" />
+    </linearGradient>
+    <linearGradient id="grain" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f7d85e" />
+      <stop offset="100%" stop-color="#d8a92f" />
+    </linearGradient>
+  </defs>
+
+  <path d="M64 20v92" stroke="url(#stem)" stroke-width="7" stroke-linecap="round" />
+
+  <g fill="url(#grain)">
+    <ellipse cx="54" cy="28" rx="8" ry="5" transform="rotate(-26 54 28)"/>
+    <ellipse cx="74" cy="28" rx="8" ry="5" transform="rotate(26 74 28)"/>
+
+    <ellipse cx="52" cy="40" rx="9" ry="5.5" transform="rotate(-26 52 40)"/>
+    <ellipse cx="76" cy="40" rx="9" ry="5.5" transform="rotate(26 76 40)"/>
+
+    <ellipse cx="50" cy="53" rx="9" ry="5.5" transform="rotate(-26 50 53)"/>
+    <ellipse cx="78" cy="53" rx="9" ry="5.5" transform="rotate(26 78 53)"/>
+
+    <ellipse cx="49" cy="66" rx="9" ry="5.5" transform="rotate(-26 49 66)"/>
+    <ellipse cx="79" cy="66" rx="9" ry="5.5" transform="rotate(26 79 66)"/>
+
+    <ellipse cx="50" cy="79" rx="8" ry="5" transform="rotate(-26 50 79)"/>
+    <ellipse cx="78" cy="79" rx="8" ry="5" transform="rotate(26 78 79)"/>
+  </g>
+</svg>

@@ -1,0 +1,212 @@
+.dashboardPage {
+    padding: var(--spacing-3xl) 0;
+    background-color: var(--color-bg-secondary);
+    min-height: calc(100vh - 200px);
+}
+
+.header {
+    text-align: center;
+    margin-bottom: var(--spacing-3xl);
+    animation: fadeIn 0.6s ease-out;
+}
+
+.title {
+    font-size: var(--font-size-4xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-md);
+}
+
+.subtitle {
+    font-size: var(--font-size-lg);
+    color: var(--color-text-secondary);
+}
+
+/* Stats Grid */
+.statsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-3xl);
+}
+
+/* Charts Grid */
+.chartsGrid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--spacing-xl);
+    margin-bottom: var(--spacing-3xl);
+}
+
+.chartCard {
+    animation: slideInFromLeft 0.5s ease-out;
+}
+
+/* Recent Section */
+.recentSection {
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-2xl);
+    box-shadow: var(--shadow-md);
+    margin-bottom: var(--spacing-3xl);
+    animation: fadeIn 0.8s ease-out;
+}
+
+.sectionHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-xl);
+}
+
+.sectionTitle {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-text-primary);
+    margin: 0;
+}
+
+.viewAllLink {
+    color: var(--color-primary);
+    font-weight: var(--font-weight-semibold);
+    text-decoration: none;
+    transition: color var(--transition-fast);
+}
+
+.viewAllLink:hover {
+    color: var(--color-primary-light);
+}
+
+.predictionsList {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-md);
+}
+
+.predictionItem {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-lg);
+    padding: var(--spacing-lg);
+    background-color: var(--color-bg-secondary);
+    border-radius: var(--radius-lg);
+    transition: all var(--transition-fast);
+}
+
+.predictionItem:hover {
+    background-color: var(--color-gray-100);
+    transform: translateX(4px);
+}
+
+.predictionIcon {
+    font-size: var(--font-size-3xl);
+    flex-shrink: 0;
+}
+
+.predictionInfo {
+    flex: 1;
+}
+
+.predictionDisease {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xs);
+}
+
+.predictionMeta {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    margin: 0;
+}
+
+.predictionBadge {
+    flex-shrink: 0;
+}
+
+/* Empty State */
+.emptyState {
+    text-align: center;
+    padding: var(--spacing-3xl) var(--spacing-xl);
+}
+
+.emptyIcon {
+    font-size: var(--font-size-6xl);
+    display: block;
+    margin-bottom: var(--spacing-lg);
+}
+
+.emptyState p {
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xl);
+}
+
+/* Quick Actions */
+.quickActions {
+    animation: fadeIn 1s ease-out;
+}
+
+.actionsGrid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--spacing-lg);
+    margin-top: var(--spacing-xl);
+}
+
+.actionCard {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-xl);
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    text-decoration: none;
+    box-shadow: var(--shadow-md);
+    transition: all var(--transition-base);
+}
+
+.actionCard:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+}
+
+.actionIcon {
+    font-size: var(--font-size-4xl);
+}
+
+.actionText {
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+
+    .statsGrid,
+    .actionsGrid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .chartsGrid {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .statsGrid,
+    .chartsGrid,
+    .actionsGrid {
+        grid-template-columns: 1fr;
+    }
+
+    .title {
+        font-size: var(--font-size-3xl);
+    }
+
+    .predictionItem {
+        flex-wrap: wrap;
+    }
+}

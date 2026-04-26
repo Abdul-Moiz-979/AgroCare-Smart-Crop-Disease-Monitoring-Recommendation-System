@@ -1,0 +1,221 @@
+.chartContainer {
+    background-color: var(--color-white);
+    border-radius: var(--radius-xl);
+    padding: var(--spacing-xl);
+    box-shadow: var(--shadow-md);
+    animation: fadeIn 0.5s ease-out;
+}
+
+.chartTitle {
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-primary);
+    margin-bottom: var(--spacing-xl);
+    text-align: center;
+}
+
+/* Pie Chart Styles */
+.pieChartWrapper {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-2xl);
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.pieChart {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0;
+}
+
+.pieSvg {
+    width: 100%;
+    height: 100%;
+    filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+}
+
+.pieSlice {
+    transition: transform var(--transition-base);
+    transform-origin: center;
+    cursor: pointer;
+}
+
+.pieSlice:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
+}
+
+.legend {
+    flex: 1;
+    min-width: 200px;
+}
+
+.legendItem {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+    padding: var(--spacing-sm);
+    border-radius: var(--radius-md);
+    transition: background-color var(--transition-fast);
+}
+
+.legendItem:hover {
+    background-color: var(--color-bg-secondary);
+}
+
+.legendColor {
+    width: 16px;
+    height: 16px;
+    border-radius: var(--radius-sm);
+    flex-shrink: 0;
+}
+
+.legendLabel {
+    flex: 1;
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text-primary);
+}
+
+.legendValue {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-tertiary);
+    font-weight: var(--font-weight-semibold);
+}
+
+/* Bar Chart Styles */
+.barChart {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    height: 300px;
+    gap: var(--spacing-md);
+    padding: var(--spacing-lg) 0;
+}
+
+.barWrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-sm);
+    height: 100%;
+}
+
+.barContainer {
+    flex: 1;
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+}
+
+.bar {
+    width: 100%;
+    max-width: 60px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    transition: all var(--transition-base);
+    position: relative;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-top: var(--spacing-sm);
+    box-shadow: var(--shadow-md);
+}
+
+.bar:hover {
+    transform: scaleY(1.05);
+    filter: brightness(1.1);
+}
+
+.barValue {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-bold);
+    color: var(--color-white);
+}
+
+.barLabel {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+}
+
+/* Line Chart Styles */
+.lineChart {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    padding: var(--spacing-lg) 0;
+}
+
+.lineSvg {
+    width: 100%;
+    height: calc(100% - 30px);
+}
+
+.gridLine {
+    stroke: var(--color-gray-200);
+    stroke-width: 0.5;
+    stroke-dasharray: 2, 2;
+}
+
+.linePath {
+    fill: none;
+    stroke: var(--color-primary);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+.linePoint {
+    fill: var(--color-white);
+    stroke: var(--color-primary);
+    stroke-width: 2;
+    transition: all var(--transition-fast);
+    cursor: pointer;
+}
+
+.linePoint:hover {
+    r: 4;
+    fill: var(--color-primary);
+}
+
+.lineLabels {
+    display: flex;
+    justify-content: space-around;
+    margin-top: var(--spacing-sm);
+    padding: 0 var(--spacing-sm);
+}
+
+.lineLabel {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    font-weight: var(--font-weight-medium);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .pieChartWrapper {
+        flex-direction: column;
+    }
+
+    .barChart {
+        height: 250px;
+        gap: var(--spacing-sm);
+    }
+
+    .bar {
+        max-width: 40px;
+    }
+
+    .barValue {
+        font-size: var(--font-size-xs);
+    }
+
+    .lineChart {
+        height: 250px;
+    }
+}
