@@ -1,5 +1,6 @@
 /* Import Google Fonts - MUST be first */
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Noto+Nastaliq+Urdu:wght@400;500;600;700&display=swap");
 
 /* Import Tailwind CSS v4 */
 @import "tailwindcss";
@@ -65,6 +66,19 @@ body {
   min-height: 100vh;
   max-width: 100%;
   overflow-x: hidden;
+}
+
+html[dir="rtl"] {
+  direction: rtl;
+}
+
+html[dir="rtl"] body {
+  text-align: right;
+}
+
+html[lang="ur"] body {
+  font-family:
+    "Noto Nastaliq Urdu", "Noto Sans Arabic", var(--font-family-sans);
 }
 
 h1,

@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAppTranslations } from "@/contexts/I18nContext";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
+  const t = useAppTranslations("login");
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -33,13 +35,13 @@ export default function LoginPage() {
     setLoading(true);
 
     if (!formData.email || !formData.password) {
-      setError("Please fill in all fields");
+      setError(t("required"));
       setLoading(false);
       return;
     }
 
     if (!formData.email.includes("@")) {
-      setError("Please enter a valid email address");
+      setError(t("invalidEmail"));
       setLoading(false);
       return;
     }
@@ -49,7 +51,7 @@ export default function LoginPage() {
     if (result.success) {
       router.push("/dashboard");
     } else {
-      setError(result.error || "Login failed");
+      setError(result.error || t("loginFailed"));
       setLoading(false);
     }
   };
@@ -72,21 +74,19 @@ export default function LoginPage() {
                 />
                 <h1 className="text-3xl font-bold text-white">AgroCare</h1>
               </div>
-              <p className="text-xl text-white/90 mb-8">
-                Protect your crops with AI-powered disease detection
-              </p>
+              <p className="text-xl text-white/90 mb-8">{t("tagline")}</p>
               <div className="space-y-4">
                 <div className="flex items-center gap-3">
                   <span className="text-xl">✓</span>
-                  <span>Instant disease detection</span>
+                  <span>{t("feature1")}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-xl">✓</span>
-                  <span>Expert recommendations</span>
+                  <span>{t("feature2")}</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <span className="text-xl">✓</span>
-                  <span>Track your crop health</span>
+                  <span>{t("feature3")}</span>
                 </div>
               </div>
             </div>
@@ -95,11 +95,9 @@ export default function LoginPage() {
           {/* Right Section - Login Form */}
           <div className="p-8 md:p-12">
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Welcome Back
+              {t("welcome")}
             </h2>
-            <p className="text-gray-600 mb-6">
-              Sign in to continue to your account
-            </p>
+            <p className="text-gray-600 mb-6">{t("subtitle")}</p>
 
             {error && (
               <div className="flex items-center gap-2 p-4 mb-6 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
@@ -114,7 +112,7 @@ export default function LoginPage() {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Email Address
+                  {t("email")}
                 </label>
                 <input
                   type="email"
@@ -133,7 +131,7 @@ export default function LoginPage() {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Password
+                  {t("password")}
                 </label>
                 <div className="relative">
                   <input
@@ -164,13 +162,13 @@ export default function LoginPage() {
                     onChange={(e) => setRememberMe(e.target.checked)}
                     className="w-4 h-4 text-green-600 rounded"
                   />
-                  <span className="text-sm text-gray-600">Remember me</span>
+                  <span className="text-sm text-gray-600">{t("remember")}</span>
                 </label>
                 <Link
                   href="/forgot-password"
                   className="text-sm text-green-600 hover:text-green-700"
                 >
-                  Forgot password?
+                  {t("forgot")}
                 </Link>
               </div>
 
@@ -179,18 +177,18 @@ export default function LoginPage() {
                 className="w-full btn btn-primary btn-lg"
                 disabled={loading}
               >
-                {loading ? "Signing in..." : "Sign In"}
+                {loading ? t("signingIn") : t("signIn")}
               </button>
             </form>
 
             <div className="mt-6 text-center">
               <p className="text-gray-600">
-                Don&apos;t have an account?{" "}
+                {t("noAccount")}{" "}
                 <Link
                   href="/signup"
                   className="text-green-600 font-medium hover:text-green-700"
                 >
-                  Create Account →
+                  {t("createAccount")} →
                 </Link>
               </p>
             </div>

@@ -83,3 +83,16 @@ class PredictionRecord(BaseModel):
 class HealthResponse(BaseModel):
     status: str
     models_loaded: dict
+
+
+# ─── Translation ────────────────────────────────────────────────
+
+class TranslateRequest(BaseModel):
+    text: str
+    target_lang: str = "en"
+
+
+class TranslateResponse(BaseModel):
+    original_text: str
+    translated_text: str
+    target_lang: str

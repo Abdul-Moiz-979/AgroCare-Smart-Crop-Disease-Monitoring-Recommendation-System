@@ -1,28 +1,82 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import PredictionCard from "@/components/PredictionCard";
 import { capitalizeFirst } from "@/lib/utils";
+import { useAppTranslations, useLocaleSettings } from "@/contexts/I18nContext";
 
 export default function ResultsPage() {
   const searchParams = useSearchParams();
+  const t = useAppTranslations("results");
+  const tPrediction = useAppTranslations("predictionCard");
+  const { locale, translateDynamicText } = useLocaleSettings();
   const crop = searchParams.get("crop");
   const diseaseName = searchParams.get("disease");
   const confidence = parseInt(searchParams.get("confidence")) || 0;
   const severity = searchParams.get("severity") || "Medium";
   const treatmentParam = searchParams.get("treatment");
+  const [translatedDisease, setTranslatedDisease] = useState(diseaseName || "");
+  const [translatedTreatment, setTranslatedTreatment] = useState(
+    treatmentParam || "",
+  );
 
-  const prediction =
-    crop && diseaseName
-      ? {
-          name: diseaseName,
-          crop,
-          confidence,
-          severity,
-          treatment: treatmentParam || "No treatment information available.",
-        }
-      : null;
+  const prediction = useMemo(() => {
+    if (!crop || !diseaseName) {
+      return null;
+    }
+
+    return {
+      name: translatedDisease || diseaseName,
+      crop,
+      confidence,
+      severity,
+      treatment:
+        translatedTreatment || treatmentParam || tPrediction("noTreatment"),
+    };
+  }, [
+    crop,
+    diseaseName,
+    confidence,
+    severity,
+    treatmentParam,
+    translatedDisease,
+    translatedTreatment,
+    tPrediction,
+  ]);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    const syncDynamicTranslation = async () => {
+      if (!diseaseName) {
+        return;
+      }
+
+      if (locale === "en") {
+        setTranslatedDisease(diseaseName);
+        setTranslatedTreatment(treatmentParam || "");
+        return;
+      }
+
+      const [diseaseText, treatmentText] = await Promise.all([
+        translateDynamicText(diseaseName, locale),
+        translateDynamicText(treatmentParam || "", locale),
+      ]);
+
+      if (!cancelled) {
+        setTranslatedDisease(diseaseText || diseaseName);
+        setTranslatedTreatment(treatmentText || treatmentParam || "");
+      }
+    };
+
+    syncDynamicTranslation();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [locale, diseaseName, treatmentParam, translateDynamicText]);
 
   if (!prediction) {
     return (
@@ -31,13 +85,11 @@ export default function ResultsPage() {
           <div className="max-w-lg mx-auto bg-white rounded-2xl p-12 shadow-md text-center">
             <span className="text-6xl block mb-6">❌</span>
             <h2 className="text-2xl font-bold text-gray-900 mb-4">
-              No Results Available
+              {t("noResults")}
             </h2>
-            <p className="text-gray-600 mb-8">
-              Please upload an image first to detect diseases
-            </p>
+            <p className="text-gray-600 mb-8">{t("noResultsDesc")}</p>
             <Link href="/detect" className="btn btn-primary">
-              Go to Detection
+              {t("goToDetection")}
             </Link>
           </div>
         </div>
@@ -50,10 +102,10 @@ export default function ResultsPage() {
       <div className="container">
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Detection Results
+            {t("title")}
           </h1>
           <p className="text-lg text-gray-600">
-            Analysis complete for {capitalizeFirst(prediction.crop)} crop
+            {t("analysisComplete", { crop: capitalizeFirst(prediction.crop) })}
           </p>
         </div>
 
@@ -62,13 +114,13 @@ export default function ResultsPage() {
 
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/detect" className="btn btn-primary">
-              🔄 Scan Another Crop
+              🔄 {t("scanAnother")}
             </Link>
             <Link href="/dashboard" className="btn btn-secondary">
-              📊 View Dashboard
+              📊 {t("viewDashboard")}
             </Link>
             <Link href="/history" className="btn btn-secondary">
-              📜 View History
+              📜 {t("viewHistory")}
             </Link>
           </div>
 
@@ -77,15 +129,9 @@ export default function ResultsPage() {
               <span className="text-2xl shrink-0">⚠️</span>
               <div>
                 <h3 className="font-semibold text-yellow-800 mb-2">
-                  Important Notice
+                  {t("important")}
                 </h3>
-                <p className="text-yellow-700 text-sm">
-                  This is a preliminary diagnosis based on image analysis. For
-                  critical cases or confirmation, please consult with a
-                  certified agricultural expert or your local extension officer.
-                  Early intervention is key to managing crop diseases
-                  effectively.
-                </p>
+                <p className="text-yellow-700 text-sm">{t("importantDesc")}</p>
               </div>
             </div>
           )}
@@ -95,13 +141,9 @@ export default function ResultsPage() {
               <span className="text-2xl shrink-0">✅</span>
               <div>
                 <h3 className="font-semibold text-green-800 mb-2">
-                  Great News!
+                  {t("greatNews")}
                 </h3>
-                <p className="text-green-700 text-sm">
-                  Your crop appears to be healthy. Continue following good
-                  agricultural practices and regular monitoring to maintain crop
-                  health.
-                </p>
+                <p className="text-green-700 text-sm">{t("greatNewsDesc")}</p>
               </div>
             </div>
           )}

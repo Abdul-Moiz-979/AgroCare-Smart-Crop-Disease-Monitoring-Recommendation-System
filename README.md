@@ -1,36 +1,113 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# AgroCare
 
-## Getting Started
+AgroCare is a crop disease detection platform built with:
 
-First, run the development server:
+- Frontend: Next.js (App Router)
+- Backend: FastAPI (Python)
+- Database: PostgreSQL
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Multilingual Support (English + Urdu)
+
+The project now includes a production-ready multilingual foundation with:
+
+- Language switcher in the navbar (English/Urdu)
+- Default language: English
+- Persistent language preference (localStorage + cookie)
+- RTL support for Urdu (`dir="rtl"`)
+- Dynamic `lang` and `dir` applied to the root HTML element
+- Translation files:
+  - `locales/en.json`
+  - `locales/ur.json`
+- Optional SEO language path support via middleware (`/en/...`, `/ur/...`)
+
+## Frontend i18n Architecture
+
+- Provider: `contexts/I18nContext.js`
+  - Uses `next-intl`
+  - Exposes `useAppTranslations(namespace)`
+  - Exposes locale controls via `useLocaleSettings()`
+  - Handles browser-language auto-detect fallback to English
+- Root wiring: `app/layout.js`
+  - Wrapped with `I18nProvider`
+- Language switcher UI: `components/Navbar.js`
+
+## Backend Translation API
+
+Endpoint:
+
+- `POST /api/translate`
+
+Request body:
+
+```json
+{
+  "text": "Common Rust",
+  "target_lang": "ur"
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Response body:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```json
+{
+  "original_text": "Common Rust",
+  "translated_text": "کامن رسٹ",
+  "target_lang": "ur"
+}
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Implemented in:
 
-## Learn More
+- `backend/app/routers/translate.py`
+- `backend/app/schemas.py`
+- Registered in `backend/app/main.py`
 
-To learn more about Next.js, take a look at the following resources:
+Dependency added:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `deep-translator`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Dynamic Content Translation (Frontend + Backend)
 
-## Deploy on Vercel
+For dynamic text (for example disease names and treatment text coming from backend), call:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- `translateDynamicText(text, targetLang)` from `useLocaleSettings()`
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+This helper internally calls `POST /api/translate`.
+
+Example usage exists in:
+
+- `app/results/page.js`
+
+## RTL and Urdu Font
+
+Global styles include:
+
+- Urdu font import (`Noto Nastaliq Urdu`)
+- `html[dir="rtl"]` direction handling
+- `html[lang="ur"]` Urdu font activation
+
+Configured in:
+
+- `styles/globals.css`
+
+## Setup
+
+### Frontend
+
+```bash
+npm install
+npm run dev
+```
+
+### Backend
+
+```bash
+cd backend
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+## Notes
+
+- If any translation key is missing in Urdu, add it to `locales/ur.json`.
+- If `/en/...` or `/ur/...` is opened, middleware stores the selected locale in a cookie and redirects to the clean route.

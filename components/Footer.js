@@ -3,11 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAppTranslations } from "@/contexts/I18nContext";
 
 import styles from "./Footer.module.css";
 
 export default function Footer() {
   const { user } = useAuth();
+  const t = useAppTranslations("footer");
+  const tNav = useAppTranslations("navbar");
   const currentYear = new Date().getFullYear();
 
   // Don't show footer if user is not logged in
@@ -32,34 +35,31 @@ export default function Footer() {
               />
               <span>AgroCare</span>
             </div>
-            <p className={styles.description}>
-              Advanced crop disease detection using cutting-edge technology to
-              help farmers protect their crops and maximize yields.
-            </p>
+            <p className={styles.description}>{t("description")}</p>
           </div>
 
           {/* Quick Links */}
           <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Quick Links</h4>
+            <h4 className={styles.sectionTitle}>{t("quickLinks")}</h4>
             <ul className={styles.linkList}>
               <li>
                 <Link href="/" className={styles.link}>
-                  Home
+                  {tNav("home")}
                 </Link>
               </li>
               <li>
                 <Link href="/detect" className={styles.link}>
-                  Disease Detection
+                  {t("detection")}
                 </Link>
               </li>
               <li>
                 <Link href="/dashboard" className={styles.link}>
-                  Dashboard
+                  {tNav("dashboard")}
                 </Link>
               </li>
               <li>
                 <Link href="/awareness" className={styles.link}>
-                  Awareness
+                  {tNav("awareness")}
                 </Link>
               </li>
             </ul>
@@ -67,26 +67,26 @@ export default function Footer() {
 
           {/* Resources */}
           <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Resources</h4>
+            <h4 className={styles.sectionTitle}>{t("resources")}</h4>
             <ul className={styles.linkList}>
               <li>
                 <Link href="/awareness" className={styles.link}>
-                  Disease Guide
+                  {t("diseaseGuide")}
                 </Link>
               </li>
               <li>
                 <Link href="/awareness" className={styles.link}>
-                  Prevention Tips
+                  {t("preventionTips")}
                 </Link>
               </li>
               <li>
                 <Link href="/awareness" className={styles.link}>
-                  Best Practices
+                  {t("bestPractices")}
                 </Link>
               </li>
               <li>
                 <Link href="/awareness" className={styles.link}>
-                  FAQ
+                  {t("faq")}
                 </Link>
               </li>
             </ul>
@@ -94,7 +94,7 @@ export default function Footer() {
 
           {/* Contact */}
           <div className={styles.section}>
-            <h4 className={styles.sectionTitle}>Contact</h4>
+            <h4 className={styles.sectionTitle}>{t("contact")}</h4>
             <ul className={styles.linkList}>
               <li className={styles.contactItem}>
                 <span>📧</span>
@@ -111,7 +111,7 @@ export default function Footer() {
         {/* Bottom Bar */}
         <div className={styles.bottomBar}>
           <p className={styles.copyright}>
-            © {currentYear} AgroCare. All rights reserved.
+            © {currentYear} AgroCare. {t("rights")}
           </p>
         </div>
       </div>

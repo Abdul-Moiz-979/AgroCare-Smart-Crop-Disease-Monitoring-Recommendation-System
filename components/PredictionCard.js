@@ -1,6 +1,8 @@
-import { getSeverityColor, capitalizeFirst } from "@/lib/utils";
+import { getSeverityColor } from "@/lib/utils";
+import { useAppTranslations } from "@/contexts/I18nContext";
 
 export default function PredictionCard({ prediction }) {
+  const t = useAppTranslations("predictionCard");
   if (!prediction) return null;
 
   const { name, severity, treatment, confidence } = prediction;
@@ -21,7 +23,7 @@ export default function PredictionCard({ prediction }) {
           .split(". ")
           .filter((s) => s.trim().length > 0)
           .map((s) => (s.endsWith(".") ? s : s + "."))
-      : ["No treatment information available."];
+      : [t("noTreatment")];
 
   return (
     <div className="bg-white rounded-2xl p-5 sm:p-6 md:p-8 shadow-lg animate-fade-in">
@@ -35,7 +37,7 @@ export default function PredictionCard({ prediction }) {
             <span
               className={`inline-flex items-center px-4 py-1 rounded-full text-sm font-semibold uppercase tracking-wider ${severityClasses[severityColorClass] || severityClasses.none}`}
             >
-              {severity} Severity
+              {severity} {t("severity")}
             </span>
           </div>
         </div>
@@ -63,7 +65,7 @@ export default function PredictionCard({ prediction }) {
               {confidence}%
             </span>
             <span className="text-xs text-gray-500 leading-none mt-0.5">
-              Confidence
+              {t("confidence")}
             </span>
           </div>
         </div>
@@ -73,7 +75,7 @@ export default function PredictionCard({ prediction }) {
       <div className="mb-8">
         <h3 className="flex items-center gap-2 text-xl font-semibold text-gray-900 mb-4">
           <span className="text-2xl">💊</span>
-          Recommended Treatment
+          {t("recommended")}
         </h3>
         <ul className="list-none p-0 m-0">
           {treatmentItems.map((step, index) => (
@@ -95,8 +97,7 @@ export default function PredictionCard({ prediction }) {
         <div className="flex items-start gap-4 p-6 bg-linear-to-br from-info/10 to-info/5 border-l-4 border-info rounded-md mt-8">
           <span className="text-xl shrink-0">ℹ️</span>
           <p className="text-gray-600 text-sm leading-relaxed m-0">
-            For accurate diagnosis and treatment, consult with a local
-            agricultural expert or extension officer.
+            {t("info")}
           </p>
         </div>
       )}

@@ -5,10 +5,12 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
+import { useAppTranslations } from "@/contexts/I18nContext";
 
 export default function SignupPage() {
   const router = useRouter();
   const { signup } = useAuth();
+  const t = useAppTranslations("signup");
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -34,7 +36,7 @@ export default function SignupPage() {
 
   const validatePassword = (password) => {
     if (password.length < 6) {
-      return "Password must be at least 6 characters long";
+      return t("passwordShort");
     }
     return null;
   };
@@ -50,13 +52,13 @@ export default function SignupPage() {
       !formData.password ||
       !formData.confirmPassword
     ) {
-      setError("Please fill in all required fields");
+      setError(t("requiredFields"));
       setLoading(false);
       return;
     }
 
     if (!formData.email.includes("@")) {
-      setError("Please enter a valid email address");
+      setError(t("invalidEmail"));
       setLoading(false);
       return;
     }
@@ -69,13 +71,13 @@ export default function SignupPage() {
     }
 
     if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
+      setError(t("passwordMismatch"));
       setLoading(false);
       return;
     }
 
     if (!acceptTerms) {
-      setError("Please accept the terms and conditions");
+      setError(t("acceptTerms"));
       setLoading(false);
       return;
     }
@@ -91,7 +93,7 @@ export default function SignupPage() {
     if (result.success) {
       router.push("/dashboard");
     } else {
-      setError(result.error || "Signup failed");
+      setError(result.error || t("signupFailed"));
       setLoading(false);
     }
   };
@@ -100,10 +102,10 @@ export default function SignupPage() {
     const password = formData.password;
     if (!password) return null;
     if (password.length < 6)
-      return { text: "Weak", color: "bg-red-500", width: "33%" };
+      return { text: t("weak"), color: "bg-red-500", width: "33%" };
     if (password.length < 10)
-      return { text: "Medium", color: "bg-yellow-500", width: "66%" };
-    return { text: "Strong", color: "bg-green-500", width: "100%" };
+      return { text: t("medium"), color: "bg-yellow-500", width: "66%" };
+    return { text: t("strong"), color: "bg-green-500", width: "100%" };
   };
 
   const passwordStrength = getPasswordStrength();
@@ -131,11 +133,9 @@ export default function SignupPage() {
             </Link>
 
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
-              Create Account
+              {t("title")}
             </h2>
-            <p className="text-gray-600 mb-6">
-              Join AgroCare to start protecting your crops
-            </p>
+            <p className="text-gray-600 mb-6">{t("subtitle")}</p>
 
             {error && (
               <div className="flex items-center gap-2 p-4 mb-6 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
@@ -150,7 +150,7 @@ export default function SignupPage() {
                   htmlFor="name"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Full Name <span className="text-red-500">*</span>
+                  {t("fullName")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
@@ -159,7 +159,7 @@ export default function SignupPage() {
                   value={formData.name}
                   onChange={handleChange}
                   className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                  placeholder="John Farmer"
+                  placeholder={t("fullName")}
                   required
                 />
               </div>
@@ -169,7 +169,7 @@ export default function SignupPage() {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Email Address <span className="text-red-500">*</span>
+                  {t("email")} <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="email"
@@ -189,7 +189,7 @@ export default function SignupPage() {
                     htmlFor="location"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Location
+                    {t("location")}
                   </label>
                   <input
                     type="text"
@@ -206,7 +206,7 @@ export default function SignupPage() {
                     htmlFor="farmSize"
                     className="block text-sm font-medium text-gray-700 mb-2"
                   >
-                    Farm Size
+                    {t("farmSize")}
                   </label>
                   <input
                     type="text"
@@ -225,7 +225,7 @@ export default function SignupPage() {
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Password <span className="text-red-500">*</span>
+                  {t("password")} <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <input
@@ -266,7 +266,7 @@ export default function SignupPage() {
                   htmlFor="confirmPassword"
                   className="block text-sm font-medium text-gray-700 mb-2"
                 >
-                  Confirm Password <span className="text-red-500">*</span>
+                  {t("confirmPassword")} <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <input
@@ -297,19 +297,18 @@ export default function SignupPage() {
                   className="w-4 h-4 text-green-600 rounded mt-1"
                 />
                 <span className="text-sm text-gray-600">
-                  I accept the{" "}
+                  {t("termsPrefix")}{" "}
                   <Link
                     href="/terms"
                     className="text-green-600 hover:underline"
                   >
-                    Terms & Conditions
+                    {t("terms")}
                   </Link>{" "}
-                  and{" "}
                   <Link
                     href="/privacy"
                     className="text-green-600 hover:underline"
                   >
-                    Privacy Policy
+                    {t("privacy")}
                   </Link>
                 </span>
               </label>
@@ -319,18 +318,18 @@ export default function SignupPage() {
                 className="w-full btn btn-primary btn-lg"
                 disabled={loading}
               >
-                {loading ? "Creating Account..." : "Create Account"}
+                {loading ? t("creating") : t("create")}
               </button>
             </form>
 
             <div className="mt-6 text-center">
               <p className="text-gray-600">
-                Already have an account?{" "}
+                {t("already")}{" "}
                 <Link
                   href="/login"
                   className="text-green-600 font-medium hover:text-green-700"
                 >
-                  Sign In →
+                  {t("signIn")} →
                 </Link>
               </p>
             </div>
@@ -339,7 +338,7 @@ export default function SignupPage() {
           {/* Right Section - Benefits */}
           <div className="bg-gradient-primary p-8 md:p-12 text-white order-1 md:order-2">
             <h3 className="text-2xl font-bold mb-8 text-white">
-              Why Join AgroCare?
+              {t("whyJoin")}
             </h3>
 
             <div className="space-y-6">
@@ -347,12 +346,9 @@ export default function SignupPage() {
                 <div className="text-3xl">🎯</div>
                 <div>
                   <h4 className="font-semibold text-white mb-1">
-                    Accurate Detection
+                    {t("accurate")}
                   </h4>
-                  <p className="text-white/80 text-sm">
-                    92% accuracy in detecting crop diseases for wheat, maize,
-                    and rice
-                  </p>
+                  <p className="text-white/80 text-sm">{t("accurateDesc")}</p>
                 </div>
               </div>
 
@@ -360,12 +356,9 @@ export default function SignupPage() {
                 <div className="text-3xl">⚡</div>
                 <div>
                   <h4 className="font-semibold text-white mb-1">
-                    Instant Results
+                    {t("instant")}
                   </h4>
-                  <p className="text-white/80 text-sm">
-                    Get disease predictions in under 2 seconds with treatment
-                    recommendations
-                  </p>
+                  <p className="text-white/80 text-sm">{t("instantDesc")}</p>
                 </div>
               </div>
 
@@ -373,12 +366,9 @@ export default function SignupPage() {
                 <div className="text-3xl">📊</div>
                 <div>
                   <h4 className="font-semibold text-white mb-1">
-                    Track Progress
+                    {t("track")}
                   </h4>
-                  <p className="text-white/80 text-sm">
-                    Monitor your crop health over time with detailed history and
-                    analytics
-                  </p>
+                  <p className="text-white/80 text-sm">{t("trackDesc")}</p>
                 </div>
               </div>
 
@@ -386,11 +376,9 @@ export default function SignupPage() {
                 <div className="text-3xl">📚</div>
                 <div>
                   <h4 className="font-semibold text-white mb-1">
-                    Expert Knowledge
+                    {t("knowledge")}
                   </h4>
-                  <p className="text-white/80 text-sm">
-                    Access comprehensive disease guides and prevention tips
-                  </p>
+                  <p className="text-white/80 text-sm">{t("knowledgeDesc")}</p>
                 </div>
               </div>
             </div>
@@ -398,15 +386,17 @@ export default function SignupPage() {
             <div className="mt-12 grid grid-cols-1 sm:grid-cols-3 gap-4 text-center">
               <div>
                 <div className="text-3xl font-bold text-white">3</div>
-                <div className="text-sm text-white/80">Crops Supported</div>
+                <div className="text-sm text-white/80">
+                  {t("cropsSupported")}
+                </div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-white">12+</div>
-                <div className="text-sm text-white/80">Diseases Detected</div>
+                <div className="text-sm text-white/80">{t("detected")}</div>
               </div>
               <div>
                 <div className="text-3xl font-bold text-white">24/7</div>
-                <div className="text-sm text-white/80">Available</div>
+                <div className="text-sm text-white/80">{t("available")}</div>
               </div>
             </div>
           </div>

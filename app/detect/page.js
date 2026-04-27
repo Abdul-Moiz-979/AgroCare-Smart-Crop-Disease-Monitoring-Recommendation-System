@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import ImageUploader from "@/components/ImageUploader";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiCall } from "@/lib/api";
+import { useAppTranslations } from "@/contexts/I18nContext";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
 
 export default function DetectPage() {
   const router = useRouter();
   const { user } = useAuth();
+  const t = useAppTranslations("detect");
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
@@ -23,7 +25,7 @@ export default function DetectPage() {
 
   const handleDetect = async () => {
     if (!selectedImage) {
-      setError("Please upload an image first");
+      setError(t("uploadFirst"));
       return;
     }
 
@@ -47,13 +49,9 @@ export default function DetectPage() {
         });
       } catch (fetchErr) {
         if (fetchErr.name === "AbortError") {
-          throw new Error(
-            "Request timed out. The server took too long to respond. Please try again.",
-          );
+          throw new Error(t("requestTimeout"));
         }
-        throw new Error(
-          "Could not connect to the server. Please make sure the backend is running.",
-        );
+        throw new Error(t("connectError"));
       } finally {
         clearTimeout(timeoutId);
       }
@@ -75,10 +73,7 @@ export default function DetectPage() {
       const data = await response.json();
 
       if (!data.success) {
-        setError(
-          data.treatment ||
-            "Invalid image. Please upload a clear photo of a corn leaf.",
-        );
+        setError(data.treatment || t("invalidImage"));
         setIsAnalyzing(false);
         return;
       }
@@ -115,7 +110,7 @@ export default function DetectPage() {
       router.push(`/results?${params.toString()}`);
     } catch (err) {
       console.error("Detection error:", err);
-      setError(err.message || "Failed to analyze image. Please try again.");
+      setError(err.message || t("analyzeFail"));
     } finally {
       setIsAnalyzing(false);
     }
@@ -126,11 +121,9 @@ export default function DetectPage() {
       <div className="container">
         <div className="text-center mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Corn Disease Detection
+            {t("title")}
           </h1>
-          <p className="text-lg text-gray-600">
-            Upload a photo of your corn leaf to detect diseases instantly
-          </p>
+          <p className="text-lg text-gray-600">{t("subtitle")}</p>
         </div>
 
         <div className="max-w-3xl mx-auto space-y-8">
@@ -140,12 +133,10 @@ export default function DetectPage() {
               <span className="text-5xl">🌽</span>
               <div>
                 <h2 className="text-lg font-semibold text-gray-900">
-                  Corn Leaf Analysis
+                  {t("bannerTitle")}
                 </h2>
                 <p className="text-sm leading-relaxed text-gray-600">
-                  Our AI can detect Common Rust, Gray Leaf Spot, and Northern
-                  Leaf Blight in corn leaves. Please upload a clear image of a
-                  corn leaf for accurate results.
+                  {t("bannerDesc")}
                 </p>
               </div>
             </div>
@@ -154,7 +145,7 @@ export default function DetectPage() {
           {/* Image Upload */}
           <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-md">
             <h2 className="text-lg font-semibold text-gray-900 mb-4">
-              Upload Corn Leaf Image
+              {t("uploadTitle")}
             </h2>
             <ImageUploader
               onImageSelect={handleImageSelect}
@@ -179,10 +170,10 @@ export default function DetectPage() {
           >
             {isAnalyzing ? (
               <span className="flex items-center justify-center gap-2">
-                <span className="animate-spin">⏳</span> Analyzing...
+                <span className="animate-spin">⏳</span> {t("analyzing")}
               </span>
             ) : (
-              "🔍 Detect Disease"
+              `🔍 ${t("detectDisease")}`
             )}
           </button>
         </div>

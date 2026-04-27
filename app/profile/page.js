@@ -4,9 +4,12 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiGet } from "@/lib/api";
 import StatCard from "@/components/StatCard";
+import { useAppTranslations, useLocaleSettings } from "@/contexts/I18nContext";
 
 export default function ProfilePage() {
   const { user, updateProfile } = useAuth();
+  const t = useAppTranslations("profile");
+  const { locale } = useLocaleSettings();
   const [isEditing, setIsEditing] = useState(false);
   const [totalScans, setTotalScans] = useState(0);
 
@@ -52,7 +55,7 @@ export default function ProfilePage() {
       farmSize: formData.farmSize,
     });
     setIsEditing(false);
-    alert("Profile updated successfully!");
+    alert(t("updated"));
   };
 
   if (!user) return null;
@@ -62,11 +65,9 @@ export default function ProfilePage() {
       <div className="container">
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            My Profile
+            {t("title")}
           </h1>
-          <p className="text-lg text-gray-600">
-            Manage your account information and preferences
-          </p>
+          <p className="text-lg text-gray-600">{t("subtitle")}</p>
         </div>
 
         <div className="space-y-8">
@@ -96,23 +97,23 @@ export default function ProfilePage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
                     <div className="bg-gray-50 rounded-xl p-4">
                       <span className="text-sm text-gray-600 block mb-1">
-                        📍 Location
+                        📍 {t("location")}
                       </span>
                       <span className="font-medium text-gray-900">
-                        {profileData.location || "Not specified"}
+                        {profileData.location || t("notSpecified")}
                       </span>
                     </div>
                     <div className="bg-gray-50 rounded-xl p-4">
                       <span className="text-sm text-gray-600 block mb-1">
-                        🌾 Farm Size
+                        🌾 {t("farmSize")}
                       </span>
                       <span className="font-medium text-gray-900">
-                        {profileData.farmSize || "Not specified"}
+                        {profileData.farmSize || t("notSpecified")}
                       </span>
                     </div>
                     <div className="bg-gray-50 rounded-xl p-4">
                       <span className="text-sm text-gray-600 block mb-1">
-                        🌱 Primary Crops
+                        🌱 {t("primaryCrops")}
                       </span>
                       <span className="font-medium text-gray-900">
                         {profileData.primaryCrops.join(", ")}
@@ -120,11 +121,11 @@ export default function ProfilePage() {
                     </div>
                     <div className="bg-gray-50 rounded-xl p-4">
                       <span className="text-sm text-gray-600 block mb-1">
-                        📅 Member Since
+                        📅 {t("memberSince")}
                       </span>
                       <span className="font-medium text-gray-900">
                         {new Date(profileData.joinedDate).toLocaleDateString(
-                          "en-US",
+                          locale === "ur" ? "ur-PK" : "en-US",
                           {
                             year: "numeric",
                             month: "long",
@@ -142,14 +143,14 @@ export default function ProfilePage() {
                       setIsEditing(true);
                     }}
                   >
-                    ✏️ Edit Profile
+                    ✏️ {t("edit")}
                   </button>
                 </>
               ) : (
                 <form onSubmit={handleSave} className="space-y-6">
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Name
+                      {t("name")}
                     </label>
                     <input
                       type="text"
@@ -162,7 +163,7 @@ export default function ProfilePage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Email
+                      {t("email")}
                     </label>
                     <input
                       type="email"
@@ -174,7 +175,7 @@ export default function ProfilePage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Location
+                      {t("location")}
                     </label>
                     <input
                       type="text"
@@ -187,7 +188,7 @@ export default function ProfilePage() {
 
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Farm Size
+                      {t("farmSize")}
                     </label>
                     <input
                       type="text"
@@ -200,14 +201,14 @@ export default function ProfilePage() {
 
                   <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
                     <button type="submit" className="btn btn-primary">
-                      💾 Save Changes
+                      💾 {t("saveChanges")}
                     </button>
                     <button
                       type="button"
                       className="btn btn-secondary"
                       onClick={() => setIsEditing(false)}
                     >
-                      Cancel
+                      {t("cancel")}
                     </button>
                   </div>
                 </form>
@@ -218,20 +219,20 @@ export default function ProfilePage() {
           {/* Stats Section */}
           <div>
             <h3 className="text-xl font-bold text-gray-900 mb-6">
-              Your Statistics
+              {t("stats")}
             </h3>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <StatCard icon="🔍" label="Total Scans" value={totalScans} />
+              <StatCard icon="🔍" label={t("totalScans")} value={totalScans} />
               <StatCard
                 icon="🌱"
-                label="Crops Monitored"
+                label={t("cropsMonitored")}
                 value={profileData.primaryCrops.length}
               />
               <StatCard
                 icon="📅"
-                label="Member Since"
+                label={t("memberSince")}
                 value={new Date(profileData.joinedDate).toLocaleDateString(
-                  "en-US",
+                  locale === "ur" ? "ur-PK" : "en-US",
                   { month: "short", year: "numeric" },
                 )}
               />
