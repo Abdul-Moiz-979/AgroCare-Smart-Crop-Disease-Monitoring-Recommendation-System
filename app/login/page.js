@@ -5,12 +5,14 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
-import { useAppTranslations } from "@/contexts/I18nContext";
+import { useAppTranslations, useLocaleSettings } from "@/contexts/I18nContext";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
   const t = useAppTranslations("login");
+  const tCommon = useAppTranslations("common");
+  const { locale, setLocale } = useLocaleSettings();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -94,6 +96,25 @@ export default function LoginPage() {
 
           {/* Right Section - Login Form */}
           <div className="p-8 md:p-12">
+            <div className="flex justify-end mb-4">
+              <label className="flex flex-col text-gray-700 min-w-36">
+                <span className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 mb-1">
+                  {tCommon("language")}
+                </span>
+                <span className="relative block">
+                  <select
+                    value={locale}
+                    onChange={(e) => setLocale(e.target.value)}
+                    className="w-full appearance-none rounded-xl bg-white border border-gray-300 pl-3 pr-10 py-2 text-[13px] font-semibold text-emerald-800 shadow-sm outline-none transition-all duration-200 cursor-pointer hover:border-gray-400 focus:ring-2 focus:ring-green-500"
+                    aria-label={tCommon("language")}
+                  >
+                    <option value="en">{tCommon("english")}</option>
+                    <option value="ur">{tCommon("urdu")}</option>
+                  </select>
+                </span>
+              </label>
+            </div>
+
             <h2 className="text-2xl font-bold text-gray-900 mb-2">
               {t("welcome")}
             </h2>
