@@ -7,7 +7,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { apiCall } from "@/lib/api";
 import { useAppTranslations } from "@/contexts/I18nContext";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const RAW_API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000";
+const API_URL = RAW_API_URL.replace(/\/+$/, "").replace(/\/api$/, "");
 
 export default function DetectPage() {
   const router = useRouter();
