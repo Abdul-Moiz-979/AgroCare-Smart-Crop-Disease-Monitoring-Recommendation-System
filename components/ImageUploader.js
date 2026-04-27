@@ -2,8 +2,10 @@
 
 import { useState, useRef } from "react";
 import { validateImageFile, formatFileSize } from "@/lib/utils";
+import { useAppTranslations } from "@/contexts/I18nContext";
 
 export default function ImageUploader({ onImageSelect, selectedCrop }) {
+  const t = useAppTranslations("imageUploader");
   const [preview, setPreview] = useState(null);
   const [fileName, setFileName] = useState("");
   const [fileSize, setFileSize] = useState("");
@@ -107,13 +109,13 @@ export default function ImageUploader({ onImageSelect, selectedCrop }) {
           <div className="pointer-events-none">
             <div className="text-5xl md:text-6xl mb-4 animate-pulse">📤</div>
             <h3 className="text-lg md:text-xl font-semibold text-gray-900 mb-2">
-              Drop your {selectedCrop || "crop"} leaf image here
+              {t("dropHere", { crop: selectedCrop || "crop" })}
             </h3>
-            <p className="text-base text-gray-600 mb-4">
-              or click to browse files
-            </p>
-            <p className="text-sm text-gray-500 m-0">
-              Supports: JPG, PNG, WebP (Max 5MB)
+            <p className="text-base text-gray-600 mb-4">{t("orClick")}</p>
+            <p className="text-sm text-gray-500 m-0">{t("supports")}</p>
+            <p className="mt-3 inline-flex items-center gap-2 rounded-md bg-amber-50 px-3 py-2 text-xs md:text-sm font-medium text-amber-800 border border-amber-200">
+              <span>⚠️</span>
+              <span>{t("disclaimerDistance")}</span>
             </p>
           </div>
         </div>
@@ -132,7 +134,7 @@ export default function ImageUploader({ onImageSelect, selectedCrop }) {
             <button
               onClick={handleRemove}
               className="flex items-center justify-center w-8 h-8 bg-error text-white border-none rounded-full cursor-pointer text-lg transition-all duration-150 hover:scale-110 hover:shadow-md"
-              aria-label="Remove image"
+              aria-label={t("removeImage")}
             >
               ✕
             </button>
@@ -141,7 +143,7 @@ export default function ImageUploader({ onImageSelect, selectedCrop }) {
           <div className="relative w-full max-w-125 mx-auto mb-6 rounded-lg overflow-hidden shadow-lg">
             <img
               src={preview}
-              alt="Preview"
+              alt={t("preview")}
               className="w-full h-auto block rounded-lg"
             />
           </div>
@@ -150,7 +152,7 @@ export default function ImageUploader({ onImageSelect, selectedCrop }) {
             onClick={handleClick}
             className="w-full px-4 py-4 bg-gray-100 text-gray-900 border border-gray-300 rounded-lg text-base font-medium cursor-pointer transition-all duration-150 hover:bg-gray-200 hover:border-gray-400"
           >
-            Change Image
+            {t("changeImage")}
           </button>
         </div>
       )}

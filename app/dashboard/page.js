@@ -7,9 +7,13 @@ import { useAuth } from "@/contexts/AuthContext";
 import { apiGet } from "@/lib/api";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useAppTranslations, useLocaleSettings } from "@/contexts/I18nContext";
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const t = useAppTranslations("dashboard");
+  const tCommon = useAppTranslations("common");
+  const { locale } = useLocaleSettings();
   const [history, setHistory] = useState([]);
   const [stats, setStats] = useState({
     totalScans: 0,
@@ -81,7 +85,12 @@ export default function DashboardPage() {
         const months = [];
         for (let i = 5; i >= 0; i--) {
           const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
-          const monthLabel = d.toLocaleDateString("en-US", { month: "short" });
+          const monthLabel = d.toLocaleDateString(
+            locale === "ur" ? "ur-PK" : "en-US",
+            {
+              month: "short",
+            },
+          );
           const count = userHistory.filter((item) => {
             if (!item.date) return false;
             const itemDate = new Date(item.date);
@@ -101,14 +110,14 @@ export default function DashboardPage() {
     };
 
     loadData();
-  }, [user]);
+  }, [user, locale]);
 
   if (isLoading) {
     return (
       <div className="min-h-screen py-12 bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <span className="text-5xl block mb-4 animate-spin">⏳</span>
-          <p className="text-gray-600">Loading dashboard...</p>
+          <p className="text-gray-600">{t("loading")}</p>
         </div>
       </div>
     );
@@ -119,36 +128,34 @@ export default function DashboardPage() {
       <div className="container">
         <div className="mb-12">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Dashboard
+            {t("title")}
           </h1>
-          <p className="text-lg text-gray-600">
-            Overview of your crop disease detection activities
-          </p>
+          <p className="text-lg text-gray-600">{t("subtitle")}</p>
         </div>
 
         {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
           <StatCard
             icon="🔍"
-            label="Total Scans"
+            label={t("totalScans")}
             value={stats.totalScans}
             color="primary"
           />
           <StatCard
             icon="🦠"
-            label="Diseases Detected"
+            label={t("diseasesDetected")}
             value={stats.diseasesDetected}
             color="warning"
           />
           <StatCard
             icon="✅"
-            label="Healthy Scans"
+            label={t("healthyScans")}
             value={stats.healthyScans}
             color="success"
           />
           <StatCard
             icon="🎯"
-            label="Avg Confidence"
+            label={t("avgConfidence")}
             value={stats.totalScans > 0 ? `${stats.avgConfidence}%` : "N/A"}
             color="info"
           />
@@ -158,9 +165,9 @@ export default function DashboardPage() {
         {stats.totalScans > 0 && (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
             {cropDistribution.length > 0 && (
-              <PieChart data={cropDistribution} title="Crop Distribution" />
+              <PieChart data={cropDistribution} title={t("cropDistribution")} />
             )}
-            <BarChart data={monthlyScans} title="Monthly Scans" />
+            <BarChart data={monthlyScans} title={t("monthlyScans")} />
           </div>
         )}
 
@@ -169,13 +176,11 @@ export default function DashboardPage() {
           <div className="bg-white rounded-2xl p-12 shadow-md text-center mb-12">
             <span className="text-5xl block mb-4">📊</span>
             <h3 className="text-xl font-semibold text-gray-900 mb-2">
-              No Data Yet
+              {t("noData")}
             </h3>
-            <p className="text-gray-600 mb-6">
-              Charts will appear once you start scanning crops
-            </p>
+            <p className="text-gray-600 mb-6">{t("noDataDesc")}</p>
             <Link href="/detect" className="btn btn-primary">
-              Start Your First Scan
+              {t("firstScan")}
             </Link>
           </div>
         )}
@@ -184,14 +189,14 @@ export default function DashboardPage() {
         <div className="bg-white rounded-2xl p-5 sm:p-6 shadow-md mb-12">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
             <h2 className="text-xl font-bold text-gray-900">
-              Recent Predictions
+              {t("recentPredictions")}
             </h2>
             {history.length > 0 && (
               <Link
                 href="/history"
                 className="text-green-600 hover:text-green-700 font-medium"
               >
-                View All →
+                {tCommon("viewAll")} →
               </Link>
             )}
           </div>
@@ -231,11 +236,9 @@ export default function DashboardPage() {
             ) : (
               <div className="text-center py-12">
                 <span className="text-5xl block mb-4">📭</span>
-                <p className="text-gray-600 mb-4">
-                  No predictions yet. Start by scanning a crop!
-                </p>
+                <p className="text-gray-600 mb-4">{t("noPredictions")}</p>
                 <Link href="/detect" className="btn btn-primary">
-                  Start Detection
+                  {tCommon("startDetection")}
                 </Link>
               </div>
             )}
@@ -245,7 +248,7 @@ export default function DashboardPage() {
         {/* Quick Actions */}
         <div>
           <h2 className="text-xl font-bold text-gray-900 mb-6">
-            Quick Actions
+            {t("quickActions")}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             <Link
@@ -253,21 +256,27 @@ export default function DashboardPage() {
               className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all text-center"
             >
               <span className="text-3xl block mb-2">🔍</span>
-              <span className="font-medium text-gray-900">New Detection</span>
+              <span className="font-medium text-gray-900">
+                {t("newDetection")}
+              </span>
             </Link>
             <Link
               href="/history"
               className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all text-center"
             >
               <span className="text-3xl block mb-2">📜</span>
-              <span className="font-medium text-gray-900">View History</span>
+              <span className="font-medium text-gray-900">
+                {t("viewHistory")}
+              </span>
             </Link>
             <Link
               href="/awareness"
               className="bg-white rounded-2xl p-6 shadow-md hover:shadow-lg hover:-translate-y-1 transition-all text-center"
             >
               <span className="text-3xl block mb-2">📚</span>
-              <span className="font-medium text-gray-900">Disease Guide</span>
+              <span className="font-medium text-gray-900">
+                {t("diseaseGuide")}
+              </span>
             </Link>
             <Link
               href="/profile"

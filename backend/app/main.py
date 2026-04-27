@@ -9,7 +9,7 @@ from fastapi.middleware.cors import CORSMiddleware
 import threading
 
 from app.database import engine, Base
-from app.routers import prediction, health, auth, users, predictions
+from app.routers import prediction, health, auth, users, predictions, translate
 from app.services.model_service import load_models
 
 
@@ -52,6 +52,7 @@ app.include_router(users.router)
 app.include_router(predictions.router)
 app.include_router(prediction.router)
 app.include_router(health.router)
+app.include_router(translate.router)
 
 
 @app.get("/")

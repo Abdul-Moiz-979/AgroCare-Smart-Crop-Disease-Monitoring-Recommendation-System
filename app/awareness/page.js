@@ -1,12 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import { awarenessContent } from "@/lib/dummyData";
+import { useAppTranslations } from "@/contexts/I18nContext";
 
 export default function AwarenessPage() {
   const [expandedFaq, setExpandedFaq] = useState(null);
+  const t = useAppTranslations("awareness");
 
-  const cropData = awarenessContent.corn;
+  const cropData = t.raw("cornData");
+  const faqs = t.raw("faqs");
 
   const toggleFaq = (index) => {
     setExpandedFaq(expandedFaq === index ? null : index);
@@ -17,11 +19,10 @@ export default function AwarenessPage() {
       <div className="container">
         <div className="text-center mb-12">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-            Corn Disease Awareness & Education
+            {t("title")}
           </h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Learn about corn diseases, prevention methods, and best practices
-            for healthy crops
+            {t("subtitle")}
           </p>
         </div>
 
@@ -31,7 +32,7 @@ export default function AwarenessPage() {
             <div className="flex justify-center mb-1">
               <span className="text-3xl block">🌽</span>
             </div>
-            <span className="font-medium text-lg">Corn</span>
+            <span className="font-medium text-lg">{t("corn")}</span>
           </div>
         </div>
 
@@ -39,7 +40,7 @@ export default function AwarenessPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
             <span>🦠</span>
-            Common Diseases in Corn
+            {t("commonDiseasesTitle")}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {cropData.commonDiseases.map((disease, index) => (
@@ -60,7 +61,7 @@ export default function AwarenessPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
             <span>🛡️</span>
-            Prevention Tips
+            {t("preventionTitle")}
           </h2>
           <div className="space-y-4">
             {cropData.preventionTips.map((tip, index) => (
@@ -81,7 +82,7 @@ export default function AwarenessPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
             <span>✅</span>
-            Best Practices
+            {t("bestPracticesTitle")}
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {cropData.bestPractices.map((practice, index) => (
@@ -100,10 +101,10 @@ export default function AwarenessPage() {
         <section className="mb-12">
           <h2 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
             <span>❓</span>
-            Frequently Asked Questions
+            {t("faqTitle")}
           </h2>
           <div className="space-y-4">
-            {awarenessContent.general.faqs.map((faq, index) => (
+            {faqs.map((faq, index) => (
               <div
                 key={index}
                 className="bg-white rounded-2xl shadow-md overflow-hidden"
@@ -132,16 +133,14 @@ export default function AwarenessPage() {
         {/* Call to Action */}
         <section className="bg-gradient-primary rounded-2xl p-7 sm:p-8 md:p-12 text-center text-white">
           <h2 className="text-2xl md:text-3xl font-bold text-white mb-4">
-            Ready to Detect Corn Diseases?
+            {t("ctaTitle")}
           </h2>
-          <p className="text-lg text-white/90 mb-8">
-            Use our AI-powered detection tool to identify corn diseases early
-          </p>
+          <p className="text-lg text-white/90 mb-8">{t("ctaDesc")}</p>
           <a
             href="/detect"
             className="btn btn-lg bg-white text-green-700 hover:bg-gray-100 shadow-lg"
           >
-            Start Detection Now →
+            {t("ctaButton")} →
           </a>
         </section>
       </div>

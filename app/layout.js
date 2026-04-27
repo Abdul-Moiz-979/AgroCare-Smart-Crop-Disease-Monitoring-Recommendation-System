@@ -1,6 +1,7 @@
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
+import { I18nProvider } from "@/contexts/I18nContext";
 import "@/styles/globals.css";
 
 export const metadata = {
@@ -19,13 +20,15 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" dir="ltr" suppressHydrationWarning>
       <body style={{ backgroundColor: "white" }}>
-        <AuthProvider>
-          <Navbar />
-          <main style={{ minHeight: "calc(100vh - 200px)" }}>{children}</main>
-          <Footer />
-        </AuthProvider>
+        <I18nProvider>
+          <AuthProvider>
+            <Navbar />
+            <main style={{ minHeight: "calc(100vh - 200px)" }}>{children}</main>
+            <Footer />
+          </AuthProvider>
+        </I18nProvider>
       </body>
     </html>
   );

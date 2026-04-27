@@ -1,13 +1,15 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { formatDate, capitalizeFirst } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiGet, apiDelete } from "@/lib/api";
 import Link from "next/link";
+import { useAppTranslations, useLocaleSettings } from "@/contexts/I18nContext";
 
 export default function HistoryPage() {
   const { user } = useAuth();
+  const t = useAppTranslations("history");
+  const { locale } = useLocaleSettings();
   const [history, setHistory] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [isLoading, setIsLoading] = useState(true);
@@ -66,7 +68,7 @@ export default function HistoryPage() {
   };
 
   const handleDelete = async (id) => {
-    if (confirm("Are you sure you want to delete this record?")) {
+    if (confirm(t("confirmDelete"))) {
       try {
         await apiDelete(`/api/predictions/${id}`);
         await reloadHistory();
@@ -77,11 +79,7 @@ export default function HistoryPage() {
   };
 
   const handleClearAll = async () => {
-    if (
-      confirm(
-        "Are you sure you want to clear all history? This cannot be undone.",
-      )
-    ) {
+    if (confirm(t("confirmClear"))) {
       try {
         await apiDelete("/api/predictions/");
         setHistory([]);
@@ -96,7 +94,7 @@ export default function HistoryPage() {
       <div className="min-h-screen py-12 bg-gray-50 flex items-center justify-center">
         <div className="text-center">
           <span className="text-5xl block mb-4 animate-spin">⏳</span>
-          <p className="text-gray-600">Loading history...</p>
+          <p className="text-gray-600">{t("loading")}</p>
         </div>
       </div>
     );
@@ -107,11 +105,9 @@ export default function HistoryPage() {
       <div className="container">
         <div className="mb-8">
           <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
-            Prediction History
+            {t("title")}
           </h1>
-          <p className="text-lg text-gray-600">
-            View and manage your past corn disease detections
-          </p>
+          <p className="text-lg text-gray-600">{t("subtitle")}</p>
         </div>
 
         {/* Filters */}
@@ -119,12 +115,12 @@ export default function HistoryPage() {
           <div className="flex flex-col md:flex-row gap-4 items-stretch md:items-end">
             <div className="flex-1">
               <label className="block text-sm font-medium text-gray-700 mb-2">
-                Search Disease:
+                {t("searchLabel")}
               </label>
               <input
                 type="text"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-green-500"
-                placeholder="Type disease name..."
+                placeholder={t("searchPlaceholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
               />
@@ -135,7 +131,7 @@ export default function HistoryPage() {
                 className="btn btn-secondary w-full md:w-auto"
                 onClick={handleClearAll}
               >
-                🗑️ Clear All
+                🗑️ {t("clearAll")}
               </button>
             )}
           </div>
@@ -173,13 +169,16 @@ export default function HistoryPage() {
 
                   <div className="flex flex-wrap gap-4 text-sm text-gray-600">
                     <span>
-                      <strong>Crop:</strong> Corn
+                      <strong>{t("crop")}:</strong> Corn
                     </span>
                     <span>
-                      <strong>Confidence:</strong> {item.confidence}%
+                      <strong>{t("confidence")}:</strong> {item.confidence}%
                     </span>
                     <span>
-                      <strong>Date:</strong> {formatDate(item.date)}
+                      <strong>{t("date")}:</strong>{" "}
+                      {new Date(item.date).toLocaleDateString(
+                        locale === "ur" ? "ur-PK" : "en-US",
+                      )}
                     </span>
                   </div>
                 </div>
@@ -187,7 +186,7 @@ export default function HistoryPage() {
                 <button
                   className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-200 transition-colors flex items-center justify-center"
                   onClick={() => handleDelete(item.id)}
-                  aria-label="Delete"
+                  aria-label={t("delete")}
                 >
                   ✕
                 </button>
@@ -199,16 +198,14 @@ export default function HistoryPage() {
                 {searchQuery ? "🔍" : "📭"}
               </span>
               <h2 className="text-xl font-semibold text-gray-900 mb-2">
-                {searchQuery ? "No matching records found" : "No history yet"}
+                {searchQuery ? t("noMatch") : t("noHistory")}
               </h2>
               <p className="text-gray-600 mb-6">
-                {searchQuery
-                  ? "Try adjusting your search"
-                  : "Start detecting corn diseases to build your history"}
+                {searchQuery ? t("adjustSearch") : t("buildHistory")}
               </p>
               {!searchQuery && (
                 <Link href="/detect" className="btn btn-primary">
-                  Start Detection
+                  {t("startDetection")}
                 </Link>
               )}
             </div>
