@@ -6,8 +6,6 @@ Corn-only disease detection with image validation.
 
 import threading
 import numpy as np
-from PIL import Image
-from io import BytesIO
 import tensorflow as tf
 from tensorflow.keras.models import load_model  # type: ignore
 
@@ -18,6 +16,7 @@ from app.config import (
     CORN_DISEASE_LABELS,
     TREATMENTS,
 )
+from app.services.image_utils import preprocess_image_bytes
 
 
 # ── Compatibility shim ─────────────────────────────────────────────────
@@ -75,12 +74,10 @@ def get_models_status() -> dict:
     return {name: "loaded" for name in _models}
 
 
-def preprocess_image(raw_bytes: bytes) -> np.ndarray:
-    """Read raw bytes → PIL Image → 224×224 numpy array."""
-    image = Image.open(BytesIO(raw_bytes)).convert("RGB")
-    image = image.resize(IMAGE_SIZE)
-    arr = np.array(image, dtype="float32")
-    return np.expand_dims(arr, axis=0)
+def preprocess_image(raw_bytes: bytes) -> tuple[np.ndarray, np.ndarray]:
+    """Read raw bytes → crop → return validator + disease tensors."""
+    target_size = int(IMAGE_SIZE[0])
+    return preprocess_image_bytes(raw_bytes, target_size)
 
 
 def validate_corn_image(image: np.ndarray) -> bool:

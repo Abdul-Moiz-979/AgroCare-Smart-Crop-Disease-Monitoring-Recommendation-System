@@ -343,7 +343,7 @@ export default function SignupPage() {
 
             <div className="space-y-6">
               <div className="flex gap-4">
-                <div className="text-3xl">🎯</div>
+                <div className="text-3xl"></div>
                 <div>
                   <h4 className="font-semibold text-white mb-1">
                     {t("accurate")}
@@ -353,7 +353,7 @@ export default function SignupPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="text-3xl">⚡</div>
+                <div className="text-3xl"></div>
                 <div>
                   <h4 className="font-semibold text-white mb-1">
                     {t("instant")}
@@ -363,7 +363,7 @@ export default function SignupPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="text-3xl">📊</div>
+                <div className="text-3xl"></div>
                 <div>
                   <h4 className="font-semibold text-white mb-1">
                     {t("track")}
@@ -373,7 +373,7 @@ export default function SignupPage() {
               </div>
 
               <div className="flex gap-4">
-                <div className="text-3xl">📚</div>
+                <div className="text-3xl"></div>
                 <div>
                   <h4 className="font-semibold text-white mb-1">
                     {t("knowledge")}

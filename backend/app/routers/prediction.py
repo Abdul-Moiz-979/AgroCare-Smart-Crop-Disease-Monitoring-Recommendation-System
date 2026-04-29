@@ -21,10 +21,10 @@ async def predict(image: UploadFile = File(...)):
     """Upload a corn leaf image → validate → detect disease."""
     try:
         raw = await image.read()
-        img = preprocess_image(raw)
+        validator_img, disease_img = preprocess_image(raw)
 
         # Step 1: Validate that the image is a valid corn leaf
-        is_valid_corn = validate_corn_image(img)
+        is_valid_corn = validate_corn_image(validator_img)
         if not is_valid_corn:
             return PredictionResponse(
                 success=False,
@@ -35,7 +35,7 @@ async def predict(image: UploadFile = File(...)):
             )
 
         # Step 2: Run disease detection
-        disease, confidence = predict_disease(img)
+        disease, confidence = predict_disease(disease_img)
         treatment = get_treatment(disease)
 
         return PredictionResponse(
@@ -45,6 +45,8 @@ async def predict(image: UploadFile = File(...)):
             confidence=confidence,
             treatment=treatment,
         )
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc))
     except HTTPException:
         raise
     except Exception as exc:
