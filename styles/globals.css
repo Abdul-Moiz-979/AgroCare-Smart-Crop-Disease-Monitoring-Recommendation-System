@@ -133,6 +133,14 @@ a:hover {
   color: var(--color-primary-light);
 }
 
+img,
+video,
+canvas,
+svg {
+  max-width: 100%;
+  height: auto;
+}
+
 /* Container */
 .container {
   width: 100%;
@@ -387,5 +395,34 @@ label {
 
   .card {
     padding: 1.5rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .container {
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+  }
+
+  .btn {
+    min-height: 44px;
+  }
+}
+
+@media (max-width: 480px) {
+  h1 {
+    font-size: 1.625rem;
+  }
+
+  h2 {
+    font-size: 1.375rem;
+  }
+
+  h3 {
+    font-size: 1.125rem;
+  }
+
+  .card {
+    padding: 1.25rem;
   }
 }

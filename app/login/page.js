@@ -5,14 +5,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { useAuth } from "@/contexts/AuthContext";
-import { useAppTranslations, useLocaleSettings } from "@/contexts/I18nContext";
+import { useAppTranslations } from "@/contexts/I18nContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
   const t = useAppTranslations("login");
-  const tCommon = useAppTranslations("common");
-  const { locale, setLocale } = useLocaleSettings();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -63,18 +62,20 @@ export default function LoginPage() {
       <div className="w-full max-w-4xl">
         <div className="bg-white rounded-2xl shadow-xl overflow-hidden grid md:grid-cols-2">
           {/* Left Section - Branding */}
-          <div className="bg-gradient-primary p-8 md:p-12 text-white hidden md:flex flex-col justify-center">
+          <div className="bg-gradient-primary p-8 md:p-12 text-white hidden md:flex flex-col justify-center min-w-0 overflow-hidden">
             <div className="text-center md:text-left">
-              <div className="flex items-center gap-3 mb-6 justify-center md:justify-start">
+              <div className="flex items-center gap-1 mb-6 justify-center md:justify-start flex-nowrap min-w-0">
                 <Image
                   src="/AgroCare_logo.png"
                   alt="AgroCare Logo"
-                  width={140}
-                  height={140}
-                  className="h-20 w-auto object-contain rounded-lg"
+                  width={120}
+                  height={120}
+                  className="h-9 lg:h-10 w-auto object-contain rounded-lg shrink-0"
                   style={{ mixBlendMode: "multiply" }}
                 />
-                <h1 className="text-3xl font-bold text-white">AgroCare</h1>
+                <h1 className="text-[clamp(1.05rem,1.15vw,1.35rem)] font-bold text-white whitespace-nowrap leading-none tracking-tight">
+                  AgroCare
+                </h1>
               </div>
               <p className="text-xl text-white/90 mb-8">{t("tagline")}</p>
               <div className="space-y-4">
@@ -96,23 +97,21 @@ export default function LoginPage() {
 
           {/* Right Section - Login Form */}
           <div className="p-8 md:p-12">
+            <div className="flex items-center justify-center gap-1 mb-4 md:hidden flex-nowrap min-w-0">
+              <Image
+                src="/AgroCare_logo.png"
+                alt="AgroCare Logo"
+                width={96}
+                height={96}
+                className="h-7 w-auto object-contain rounded-lg shrink-0"
+                style={{ mixBlendMode: "multiply" }}
+              />
+              <span className="text-[clamp(0.95rem,3vw,1.05rem)] font-bold text-gray-900 whitespace-nowrap leading-none tracking-tight">
+                AgroCare
+              </span>
+            </div>
             <div className="flex justify-end mb-4">
-              <label className="flex flex-col text-gray-700 min-w-36">
-                <span className="text-[11px] font-semibold uppercase tracking-wide text-gray-500 mb-1">
-                  {tCommon("language")}
-                </span>
-                <span className="relative block">
-                  <select
-                    value={locale}
-                    onChange={(e) => setLocale(e.target.value)}
-                    className="w-full appearance-none rounded-xl bg-white border border-gray-300 pl-3 pr-10 py-2 text-[13px] font-semibold text-emerald-800 shadow-sm outline-none transition-all duration-200 cursor-pointer hover:border-gray-400 focus:ring-2 focus:ring-green-500"
-                    aria-label={tCommon("language")}
-                  >
-                    <option value="en">{tCommon("english")}</option>
-                    <option value="ur">{tCommon("urdu")}</option>
-                  </select>
-                </span>
-              </label>
+              <LanguageSwitcher tone="light" />
             </div>
 
             <h2 className="text-2xl font-bold text-gray-900 mb-2">

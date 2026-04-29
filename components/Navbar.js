@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useAppTranslations, useLocaleSettings } from "@/contexts/I18nContext";
+import LanguageSwitcher from "@/components/LanguageSwitcher";
 
 const NAV_LINKS = [
   { href: "/", key: "home" },
@@ -21,8 +22,7 @@ export default function Navbar() {
   const router = useRouter();
   const { user, logout } = useAuth();
   const tNav = useAppTranslations("navbar");
-  const tCommon = useAppTranslations("common");
-  const { locale, setLocale, isRtl } = useLocaleSettings();
+  const { isRtl } = useLocaleSettings();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
@@ -92,22 +92,7 @@ export default function Navbar() {
 
         {/* User Info & Logout */}
         <div className="hidden xl:flex items-center gap-3 2xl:gap-4">
-          <label className="flex flex-col text-white min-w-45">
-            <span className="text-[11px] font-semibold uppercase tracking-wide text-white/90 mb-1">
-              {tCommon("language")}
-            </span>
-            <span className="relative block">
-              <select
-                value={locale}
-                onChange={(e) => setLocale(e.target.value)}
-                className="w-full appearance-none rounded-xl bg-white/95 border border-white/40 pl-3 pr-10 py-2 text-[13px] font-semibold text-emerald-800 shadow-sm outline-none transition-all duration-200 cursor-pointer hover:bg-white hover:border-white/80 hover:shadow-md focus:ring-2 focus:ring-white/60"
-                aria-label={tCommon("language")}
-              >
-                <option value="en">{tCommon("english")}</option>
-                <option value="ur">{tCommon("urdu")}</option>
-              </select>
-            </span>
-          </label>
+          <LanguageSwitcher tone="dark" />
           <span className="text-white font-medium text-sm whitespace-nowrap">
             👤 {tNav("user")}: {user.name}
           </span>
@@ -166,22 +151,7 @@ export default function Navbar() {
           ))}
 
           <li className="mt-2 px-4">
-            <label className="flex flex-col text-white text-sm">
-              <span className="text-xs font-semibold uppercase tracking-wide text-white/90 mb-2">
-                {tCommon("language")}
-              </span>
-              <span className="relative block">
-                <select
-                  value={locale}
-                  onChange={(e) => setLocale(e.target.value)}
-                  className="w-full appearance-none rounded-xl bg-white/95 border border-white/40 pl-3 pr-10 py-2.5 text-sm font-semibold text-emerald-800 shadow-sm outline-none transition-all duration-200 cursor-pointer hover:bg-white hover:border-white/80 hover:shadow-md"
-                  aria-label={tCommon("language")}
-                >
-                  <option value="en">{tCommon("english")}</option>
-                  <option value="ur">{tCommon("urdu")}</option>
-                </select>
-              </span>
-            </label>
+            <LanguageSwitcher tone="dark" className="w-full justify-between" />
           </li>
 
           {/* Mobile User Info & Logout */}

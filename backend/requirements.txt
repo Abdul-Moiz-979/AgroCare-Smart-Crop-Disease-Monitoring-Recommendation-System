@@ -3,6 +3,7 @@ uvicorn[standard]
 tensorflow
 numpy
 pillow
+opencv-python-headless
 python-multipart
 python-dotenv
 sqlalchemy
